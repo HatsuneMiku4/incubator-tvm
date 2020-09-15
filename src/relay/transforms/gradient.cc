@@ -213,7 +213,8 @@ Type GradRetType(const Function& f) {
     vt.push_back(p->type_annotation);
   }
 
-  return TupleType({f->ret_type, TupleType(vt)});
+  return TupleType(vt);
+  // return TupleType({f->ret_type, TupleType(vt)});
 }
 
 Expr FirstOrderGradient(const Expr& re, const Optional<IRModule>& mod) {
@@ -246,8 +247,10 @@ Expr FirstOrderGradient(const Expr& re, const Optional<IRModule>& mod) {
       }
       return Tuple(grad_res);
     });
-    return Pair(res.forward, grad);
-  });
+
+    return grad;
+    // return Pair(res.forward, grad);
+  }); 
 
   return Function(f->params, body, GradRetType(GetRef<Function>(f)), {});
 }
